@@ -54,7 +54,7 @@ with col2:
 with col3:
     creditos = st.number_input("Créditos", min_value=1, step=1)
 
-tipologia = st.selectbox("Tipología de la asignatura", ["Teoría", "Prácticas", "Electiva", "Optativa"])
+tipologia = st.selectbox("Tipología de la asignatura", ["Fund. Obligatoria", "Fund. Optativa", "Dis. Obligatoria", "Dis. Optativa", "Libre eleccion"])
 
 if st.button("Agregar Materia"):
     if materia and calificacion >= 0 and creditos > 0:

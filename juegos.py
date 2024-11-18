@@ -4,7 +4,7 @@ import requests
 # Función para obtener la información del juego
 def obtener_info_juego(nombre_juego):
     url = f'https://api.rawg.io/api/games'
-    params = {'key': 'tu_api_key', 'page_size': 1, 'search': nombre_juego}
+    params = {'key': '10353b6967544f359fae182090a15b06', 'page_size': 1, 'search': nombre_juego}
     response = requests.get(url, params=params)
     data = response.json()
 

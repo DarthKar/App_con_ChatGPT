@@ -63,8 +63,15 @@ if st.button("Generar Reporte"):
     if fecha_inicio > fecha_fin:
         st.error("La fecha de inicio no puede ser mayor que la fecha de fin.")
     else:
+        # Convertir las fechas de inicio y fin al tipo datetime
+        fecha_inicio = pd.to_datetime(fecha_inicio)
+        fecha_fin = pd.to_datetime(fecha_fin)
+        
+        # Asegurarse de que las fechas en el DataFrame sean del tipo datetime
         df = st.session_state.finanzas.copy()
         df["Fecha"] = pd.to_datetime(df["Fecha"])
+
+        # Filtrar las transacciones por el rango de fechas
         filtro = (df["Fecha"] >= fecha_inicio) & (df["Fecha"] <= fecha_fin)
         df_filtrado = df[filtro]
 

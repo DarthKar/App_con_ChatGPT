@@ -41,6 +41,7 @@ def calcular_papa(df):
 
 # Título de la app
 st.title("Calculadora del Promedio Aritmético Ponderado Acumulado (PAPA)")
+st.write("Esta app fue desarrollada por Miguel Ángel Peña Marín")
 
 # Agregar una materia
 st.header("Agregar Materia")
@@ -69,16 +70,27 @@ if not st.session_state.materias.empty:
 else:
     st.write("No hay materias registradas.")
 
-# Calcular el PAPA
-if st.button("Calcular PAPA"):
+# Calcular el PAPA Global
+if st.button("Calcular PAPA Global"):
     if not st.session_state.materias.empty:
-        papa_global, papa_tipologia = calcular_papa(st.session_state.materias)
+        papa_global, _ = calcular_papa(st.session_state.materias)
 
         st.subheader("PAPA Global")
         st.write(f"**PAPA Global:** {papa_global:.2f}")
-
-        st.subheader("PAPA por Tipología")
-        for tipologia, papa in papa_tipologia.items():
-            st.write(f"**{tipologia}:** {papa:.2f}")
     else:
-        st.error("No hay materias registradas para calcular el PAPA.")
+        st.error("No hay materias registradas para calcular el PAPA global.")
+
+# Calcular el PAPA por Tipología
+st.header("Calcular PAPA por Tipología")
+tipologia_seleccionada = st.selectbox("Selecciona la Tipología", st.session_state.materias["Tipología"].unique())
+if st.button("Calcular PAPA por Tipología"):
+    if not st.session_state.materias.empty:
+        _, papa_tipologia = calcular_papa(st.session_state.materias)
+        
+        if tipologia_seleccionada in papa_tipologia:
+            st.subheader(f"PAPA para {tipologia_seleccionada}")
+            st.write(f"**PAPA para {tipologia_seleccionada}:** {papa_tipologia[tipologia_seleccionada]:.2f}")
+        else:
+            st.error(f"No se encontraron materias para la tipología {tipologia_seleccionada}.")
+    else:
+        st.error("No hay materias registradas para calcular el PAPA por tipología.")

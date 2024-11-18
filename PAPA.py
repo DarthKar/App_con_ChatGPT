@@ -14,7 +14,7 @@ def agregar_materia(materia, calificacion, creditos, tipologia):
             "Materia": [materia],
             "Calificación": [calificacion],
             "Créditos": [creditos],
-            "Tipología": [tipologia]
+            "Tipología": [tipologia],
         }
     )
     st.session_state.materias = pd.concat(
@@ -43,7 +43,7 @@ def calcular_papa(df):
 st.title("Calculadora del Promedio Aritmético Ponderado Acumulado (PAPA)")
 st.write("Esta app fue desarrollada por Miguel Ángel Peña Marín")
 
-# Agregar una materia
+# Agregar una materia manualmente
 st.header("Agregar Materia")
 col1, col2, col3 = st.columns(3)
 
@@ -54,7 +54,10 @@ with col2:
 with col3:
     creditos = st.number_input("Créditos", min_value=1, step=1)
 
-tipologia = st.selectbox("Tipología de la asignatura", ["Fund. Obligatoria", "Fund. Optativa", "Dis. Obligatoria", "Dis. Optativa", "Libre eleccion"])
+tipologia = st.selectbox(
+    "Tipología de la asignatura",
+    ["Fund. Obligatoria", "Fund. Optativa", "Dis. Obligatoria", "Dis. Optativa", "Libre Elección"],
+)
 
 if st.button("Agregar Materia"):
     if materia and calificacion >= 0 and creditos > 0:
@@ -62,6 +65,26 @@ if st.button("Agregar Materia"):
         st.success("¡Materia agregada exitosamente!")
     else:
         st.error("Por favor, ingresa todos los datos correctamente.")
+
+# Cargar datos desde un archivo CSV
+st.header("Cargar Materias desde un Archivo CSV")
+archivo_csv = st.file_uploader("Sube tu archivo CSV", type=["csv"])
+
+if archivo_csv:
+    try:
+        data = pd.read_csv(archivo_csv)
+        # Verificar que las columnas necesarias estén en el archivo
+        columnas_requeridas = ["Materia", "Calificación", "Créditos", "Tipología"]
+        if all(col in data.columns for col in columnas_requeridas):
+            st.session_state.materias = pd.concat(
+                [st.session_state.materias, data[columnas_requeridas]],
+                ignore_index=True,
+            )
+            st.success("¡Archivo CSV cargado exitosamente!")
+        else:
+            st.error(f"El archivo debe contener las columnas: {', '.join(columnas_requeridas)}")
+    except Exception as e:
+        st.error(f"Error al cargar el archivo: {e}")
 
 # Mostrar las materias registradas
 st.header("Materias Registradas")
@@ -74,7 +97,6 @@ else:
 if st.button("Calcular PAPA Global"):
     if not st.session_state.materias.empty:
         papa_global, _ = calcular_papa(st.session_state.materias)
-
         st.subheader("PAPA Global")
         st.write(f"**PAPA Global:** {papa_global:.2f}")
     else:
@@ -82,11 +104,12 @@ if st.button("Calcular PAPA Global"):
 
 # Calcular el PAPA por Tipología
 st.header("Calcular PAPA por Tipología")
-tipologia_seleccionada = st.selectbox("Selecciona la Tipología", st.session_state.materias["Tipología"].unique())
+tipologia_seleccionada = st.selectbox(
+    "Selecciona la Tipología", st.session_state.materias["Tipología"].unique()
+)
 if st.button("Calcular PAPA por Tipología"):
     if not st.session_state.materias.empty:
         _, papa_tipologia = calcular_papa(st.session_state.materias)
-        
         if tipologia_seleccionada in papa_tipologia:
             st.subheader(f"PAPA para {tipologia_seleccionada}")
             st.write(f"**PAPA para {tipologia_seleccionada}:** {papa_tipologia[tipologia_seleccionada]:.2f}")

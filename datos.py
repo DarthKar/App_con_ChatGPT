@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime as dt
 
-# Inicializar datos en session_state
+# Inicialización de los datos en session_state
 if "finanzas" not in st.session_state:
     st.session_state.finanzas = pd.DataFrame(
         columns=["Fecha", "Categoría", "Monto", "Tipo", "Descripción"]
@@ -24,8 +24,8 @@ def agregar_transaccion(fecha, categoria, monto, tipo, descripcion):
     )
 
 # Título de la app
-st.title("Gestor de Finanzas - Miguel Ángel Peña Marín")
-st.write("Administra tus ingresos, gastos y metas de ahorro de manera eficiente.")
+st.title("Gestor de Finanzas Personales")
+st.write("Esta app fue desarrollada por Miguel Ángel Peña Marín")
 
 # Registro de transacciones
 st.header("Registrar Transacción")
@@ -46,7 +46,7 @@ if st.button("Agregar Transacción"):
     agregar_transaccion(fecha, categoria, monto, tipo, descripcion)
     st.success("¡Transacción agregada exitosamente!")
 
-# Visualización de transacciones
+# Mostrar las transacciones registradas
 st.header("Transacciones Registradas")
 if not st.session_state.finanzas.empty:
     st.dataframe(st.session_state.finanzas)

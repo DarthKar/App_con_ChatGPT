@@ -42,7 +42,7 @@ def calcular_papa(df):
 # Título de la app
 st.title("Calculadora del Promedio Aritmético Ponderado Acumulado (PAPA)")
 st.write("Esta app fue desarrollada por Miguel Ángel Peña Marín")
-
+st.write("hO")
 # Agregar una materia manualmente
 st.header("Agregar Materia")
 col1, col2, col3 = st.columns(3)
